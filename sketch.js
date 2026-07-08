@@ -3,7 +3,8 @@
 //
 // Controls: arrow keys / WASD. After a win or loss, press R to restart.
 // The maze is the hand-authored MAZE_LAYOUT grid below (0 = obstacle,
-// 1 = path) plus MAZE_START / MAZE_EXIT / MAZE_FOODS markers.
+// 1 = path) plus MAZE_START / MAZE_EXIT markers. Food is placed
+// automatically in every dead-end (see deadEndCells()).
 // All tuning lives in CONFIG. Everything is sized from CONFIG.TILE_SIZE
 // and positioned inside CONFIG.FENCE_BOUNDS (the fenced area of the
 // background image).
@@ -220,17 +221,11 @@ const MAZE_LAYOUT = [
 
 const MAZE_START = { col: 1, row: 1 };
 const MAZE_EXIT = { col: 19, row: 9 };
-// Foods sit only in dead-ends off the critical path — branches with only one
-// path connection. Increased frequency (~2x original) with more dead-end detours.
-const MAZE_FOODS = [
-  { col: 5, row: 7 },   // dead-end off left branch
-  { col: 19, row: 3 },  // dead-end cap, right side
-  { col: 5, row: 9 },   // dead-end, bottom left
-  { col: 13, row: 3 },  // dead-end, upper middle
-  { col: 17, row: 3 },  // dead-end, upper right area
-  { col: 15, row: 5 },  // dead-end, right side
-  { col: 1, row: 8 },   // dead-end, far left
-];
+// Food is placed automatically in every dead-end of the maze — a walkable
+// cell with only one walkable neighbour — so all food always sits in dead
+// ends. The start and exit caps are single-neighbour cells too, but they are
+// excluded (they aren't food spots). Editing MAZE_LAYOUT moves the food along
+// with the dead-ends, no manual coordinate upkeep required.
 
 // ============================================================
 // Internal state
@@ -932,14 +927,33 @@ function parseMaze() {
   if (!isWalkable(MAZE_START.col, MAZE_START.row)) throw new Error("MAZE_START is not on a path cell");
   if (!isWalkable(MAZE_EXIT.col, MAZE_EXIT.row)) throw new Error("MAZE_EXIT is not on a path cell");
 
-  foods = MAZE_FOODS.map((f, i) => {
-    if (!isWalkable(f.col, f.row)) throw new Error(`Food ${i} is not on a path cell`);
-    return { col: f.col, row: f.row, kind: i % img.food.length, eaten: false };
-  });
+  foods = deadEndCells().map((f, i) => ({
+    col: f.col, row: f.row, kind: i % img.food.length, eaten: false,
+  }));
 }
 
 function isWalkable(col, row) {
   return col >= 0 && row >= 0 && col < COLS && row < ROWS && grid[row][col].walk;
+}
+
+// Every dead-end path cell — walkable with exactly one walkable neighbour —
+// excluding the start and exit (which are also single-neighbour caps but are
+// not food spots). This guarantees all food lives in dead ends.
+function deadEndCells() {
+  const cells = [];
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      if (!isWalkable(col, row)) continue;
+      const neighbours =
+        isWalkable(col, row - 1) + isWalkable(col + 1, row) +
+        isWalkable(col, row + 1) + isWalkable(col - 1, row);
+      if (neighbours > 1) continue;
+      if (col === MAZE_START.col && row === MAZE_START.row) continue;
+      if (col === MAZE_EXIT.col && row === MAZE_EXIT.row) continue;
+      cells.push({ col, row });
+    }
+  }
+  return cells;
 }
 
 // Pre-render background, path tiles, and obstacles once — the source art is
