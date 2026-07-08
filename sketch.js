@@ -30,7 +30,7 @@ const CONFIG = {
   FONT_PATH: "dogica/TTF/dogica.ttf",
 
   // Splash screen on initial load.
-  SPLASH_IMAGE_PATH: "assets/images/splash.png",
+  SPLASH_IMAGE_PATH: "assets/images/Splash.png",
   SPLASH_PROMPT_TEXT: "Press SPACE to start",
   SPLASH_PULSE_PERIOD_SECONDS: 1.5,
 
