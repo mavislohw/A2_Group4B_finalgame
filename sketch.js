@@ -28,6 +28,14 @@ const CONFIG = {
   // Global font — applied to every piece of text the game renders.
   FONT_PATH: "dogica/TTF/dogica.ttf",
 
+  // Splash screen on initial load.
+  SPLASH_IMAGE_PATH: "assets/images/splash.png",
+  SPLASH_PROMPT_TEXT: "Press SPACE to start",
+  SPLASH_PULSE_PERIOD_SECONDS: 1.5,
+
+  // Movement hint in top-left.
+  MOVEMENT_HINT_TEXT: "WASD or arrows to navigate",
+
   // Eating is input-triggered: standing on food shows a small "Press E to
   // eat" hint; pressing E opens the math-question modal. Stepping onto food
   // does nothing on its own, so accidental eating is impossible.
@@ -212,13 +220,16 @@ const MAZE_LAYOUT = [
 
 const MAZE_START = { col: 1, row: 1 };
 const MAZE_EXIT = { col: 19, row: 9 };
-// Foods sit only in dead-ends off the critical path. Each is a real detour
-// (~9-10s round trip incl. the pause); the first branches off ~3s from the
-// start, so skipping it bites by mid-maze.
+// Foods sit only in dead-ends off the critical path — branches with only one
+// path connection. Increased frequency (~2x original) with more dead-end detours.
 const MAZE_FOODS = [
-  { col: 5, row: 7 },
-  { col: 19, row: 3 },
-  { col: 5, row: 9 },
+  { col: 5, row: 7 },   // dead-end off left branch
+  { col: 19, row: 3 },  // dead-end cap, right side
+  { col: 5, row: 9 },   // dead-end, bottom left
+  { col: 13, row: 3 },  // dead-end, upper middle
+  { col: 17, row: 3 },  // dead-end, upper right area
+  { col: 15, row: 5 },  // dead-end, right side
+  { col: 1, row: 8 },   // dead-end, far left
 ];
 
 // ============================================================
@@ -240,7 +251,7 @@ let foods = [];          // { col, row, kind, eaten }
 let fogAlpha, fogTouch, fogSeen; // per-tile fog state
 
 let player;
-let state = "title";     // title | playing | win | lose
+let state = "splash";    // splash | playing | win | lose
 let timeLeft;            // countdown (the only UI element)
 let timeSinceLastAte;    // the hidden variable — never displayed
 let clock;               // elapsed play time, drives fog aging
@@ -254,6 +265,7 @@ let eatPromptAlpha;      // "Press E to eat" hint opacity 0..1 (fades with on/of
 let musicFilter;         // low-pass filter on the music for audio thinning
 let tickOsc, tickEnv;    // soft synth tick for wrong answers
 let fontDogica;          // the global game font
+let imgSplash;           // splash screen image
 
 let timeStandingStill;   // seconds since the player last moved
 let stillLevel;          // displayed stillness-distortion level 0..1
@@ -266,6 +278,7 @@ function preload() {
   fontDogica = loadFont(CONFIG.FONT_PATH);
   img.modal = loadImage(CONFIG.MODAL_BACKGROUND_PATH);
   img.background = loadImage(CONFIG.ASSETS.background);
+  imgSplash = loadImage(CONFIG.SPLASH_IMAGE_PATH);
   img.sheet = loadImage(CONFIG.ASSETS.characterSheet);
   img.fog = loadImage(CONFIG.ASSETS.fog);
   for (const p of CONFIG.ASSETS.food) img.food.push(loadImage(p));
@@ -330,11 +343,17 @@ function setup() {
   textFont(fontDogica); // every text() call in the game uses Dogica
 
   resetGame();
-  state = "title";
+  state = "splash";
 }
 
 function draw() {
   const dt = min(deltaTime / 1000, 0.05);
+  
+  if (state === "splash") {
+    drawSplash();
+    return;
+  }
+
   update(dt);
   if (state === "win" || state === "lose") endRevealT += dt;
 
@@ -346,6 +365,7 @@ function draw() {
   drawVignette();
   drawEatPrompt();
   drawEatModal();
+  drawMovementHint();
   drawTimer();
   drawOverlays();
   manageWalkSound();
@@ -774,26 +794,45 @@ function drawTimer() {
   }
 
   textSize(size);
-  textAlign(LEFT, TOP);
+  textAlign(RIGHT, TOP);
   fill(0, 190);
-  text(label, 22, 22);
+  text(label, width - 20 + 2, 20 + 2);
   fill(col);
-  text(label, 20, 20);
+  text(label, width - 20, 20);
+}
+
+function drawMovementHint() {
+  textAlign(LEFT, TOP);
+  textSize(24); // ~60-70% of timer size (36)
+  fill(200, 200, 200, 180); // soft gray, muted
+  text(CONFIG.MOVEMENT_HINT_TEXT, 20, 20);
+}
+
+function drawSplash() {
+  // Display splash image scaled to fit canvas while preserving aspect ratio
+  const imgAspect = imgSplash.width / imgSplash.height;
+  const canvasAspect = width / height;
+  let displayWidth, displayHeight;
+  
+  if (imgAspect > canvasAspect) {
+    // Image is wider; fit to height
+    displayHeight = height;
+    displayWidth = height * imgAspect;
+  } else {
+    // Image is taller; fit to width
+    displayWidth = width;
+    displayHeight = width / imgAspect;
+  }
+  
+  const offsetX = (width - displayWidth) / 2;
+  const offsetY = (height - displayHeight) / 2;
+  image(imgSplash, offsetX, offsetY, displayWidth, displayHeight);
 }
 
 function drawOverlays() {
-  if (state === "playing") return;
+  if (state === "playing" || state === "splash") return;
 
   textAlign(CENTER, CENTER);
-
-  if (state === "title") {
-    fill(0, 170);
-    rect(0, 0, width, height);
-    fill(255);
-    textSize(72);
-    text(CONFIG.TEXT.title, width / 2, height / 2);
-    return;
-  }
 
   // End-of-run reveal: hold on the true final state — trail fade, shadow,
   // number, everything exactly as it is — before any text appears.
@@ -821,10 +860,15 @@ function manageWalkSound() {
 // Input
 // ============================================================
 function keyPressed() {
-  if (state === "title") {
-    userStartAudio();
-    if (snd.music.isLoaded() && !snd.music.isPlaying()) snd.music.loop();
-    state = "playing";
+  if (state === "splash") {
+    // Only SPACE dismisses the splash
+    if (keyCode === 32) { // SPACE
+      userStartAudio();
+      if (snd.music.isLoaded() && !snd.music.isPlaying()) snd.music.loop();
+      state = "playing";
+      return false;
+    }
+    // All other keys are inert during splash
     return false;
   }
 
