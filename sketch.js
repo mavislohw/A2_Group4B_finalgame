@@ -72,21 +72,21 @@ const CONFIG = {
 
   // Eating feedback (visual only — plays once the sequence completes).
   FOOD_VANISH_SECONDS: 0.4, // food scales up ~120% and fades out over this
-  EAT_GLOW_SECONDS: 0.5,    // radial glow pulse duration on completion
+  EAT_GLOW_SECONDS: 0.5, // radial glow pulse duration on completion
   EAT_GLOW_PEAK_SCALE: 1.5, // glow diameter at its peak, in tiles
-  EAT_GLOW_ALPHA: 0.55,     // glow opacity at the moment of eating
+  EAT_GLOW_ALPHA: 0.55, // glow opacity at the moment of eating
 
   // The hidden mechanic. Fog creeps back over revealed tiles at
   //   rate = min(FADE_MAX_RATE, FADE_RAMP_PER_SECOND * (timeSinceLastAte - FADE_ONSET_SECONDS))
   // scaled per tile by how long ago it was last walked
   // (age / FADE_AGE_WINDOW_SECONDS, capped at 1) so the oldest trail fades first.
-  FADE_ONSET_SECONDS: 8,      // no fading this long after eating (or after start)
-  FADE_RAMP_PER_SECOND: 0.020,
-  FADE_MAX_RATE: 0.6,         // hard cap on fade speed (alpha/second)
+  FADE_ONSET_SECONDS: 8, // no fading this long after eating (or after start)
+  FADE_RAMP_PER_SECOND: 0.02,
+  FADE_MAX_RATE: 0.6, // hard cap on fade speed (alpha/second)
   FADE_AGE_WINDOW_SECONDS: 20,
 
   PLAYER_SPEED_TILES_PER_SEC: 3.0,
-  REVEAL_RADIUS_TILES: 1.6,   // how far around the player tiles reveal
+  REVEAL_RADIUS_TILES: 1.6, // how far around the player tiles reveal
 
   // Starvation effects. Every effect below reads the same eased copy of the
   // hidden variable, ramps from its own onset up to full strength at
@@ -101,43 +101,43 @@ const CONFIG = {
 
   // Audio thinning: music gets quieter and muffled (low-pass) while starved.
   AUDIO_THINNING_ONSET_SECONDS: 8,
-  MIN_MUSIC_VOLUME: 0.4,      // fraction of normal music volume at peak
+  MIN_MUSIC_VOLUME: 0.4, // fraction of normal music volume at peak
   MUSIC_VOLUME: 0.45,
 
   // Starved movement: the one starvation effect with real mechanical bite.
   STARVATION_SPEED_ONSET_SECONDS: 30,
-  MIN_SPEED_MULTIPLIER: 0.8,  // movement speed factor at peak starvation
+  MIN_SPEED_MULTIPLIER: 0.8, // movement speed factor at peak starvation
 
   // End-of-run reveal: hold on the true final state before any text.
   END_REVEAL_HOLD_SECONDS: 2,
   END_REVEAL_FADE_SECONDS: 0.5,
 
   // Element scales, all relative to TILE_SIZE.
-  PLAYER_SCALE: 0.95,         // sprite fits inside one tile
+  PLAYER_SCALE: 0.95, // sprite fits inside one tile
   FOOD_SCALE: 0.75,
 
   // Drop shadow under the character. It stays locked to the ground at the
   // true grid position while the sprite wobbles and swells above it, so it
   // doubles as an honest reference for where the player really is.
   // Small and light when fed; large and heavy when starved.
-  SHADOW_ALPHA: 0.35,         // center darkness when fed
-  SHADOW_MAX_ALPHA: 0.75,     // center darkness at peak starvation
-  SHADOW_SIZE: 0.6,           // ellipse width in tiles when fed
-  SHADOW_MAX_SCALE: 2.5,      // ellipse width in tiles at peak starvation
+  SHADOW_ALPHA: 0.35, // center darkness when fed
+  SHADOW_MAX_ALPHA: 0.75, // center darkness at peak starvation
+  SHADOW_SIZE: 0.6, // ellipse width in tiles when fed
+  SHADOW_MAX_SCALE: 2.5, // ellipse width in tiles at peak starvation
 
   // Stillness-triggered distortion. Driven purely by timeStandingStill —
   // timeSinceLastAte has no influence on it. Subtle: a slow, uneasy
   // breathing rather than an active warp. Purely visual and deterministic —
   // collision and the true position stay locked to TILE_SIZE throughout.
   STILLNESS_DISTORTION_ONSET_SECONDS: 0.5,
-  MAX_SPRITE_WARP_PIXELS: 3,    // sine edge displacement at full stillness
-  MAX_ASYMMETRIC_SCALE: 0.06,   // +/-6% taller/thinner <-> wider/shorter
+  MAX_SPRITE_WARP_PIXELS: 3, // sine edge displacement at full stillness
+  MAX_ASYMMETRIC_SCALE: 0.06, // +/-6% taller/thinner <-> wider/shorter
   DISTORTION_RESOLVE_SECONDS: 0.4, // ease back to normal after moving
 
   ANIM: {
     framesPerSecond: 8,
-    walkCycle: [0, 1, 0, 2],  // sprite sheet columns cycled while walking
-    idleFrame: 0,             // column shown when standing still
+    walkCycle: [0, 1, 0, 2], // sprite sheet columns cycled while walking
+    idleFrame: 0, // column shown when standing still
   },
   // Character sprite sheet layout: 3 columns of animation frames, 4 rows.
   // The sheet has no left-facing row (rows 2 and 3 both face right), so
@@ -206,17 +206,17 @@ const CONFIG = {
 // automatically from each cell's neighbors at load time.
 // ============================================================
 const MAZE_LAYOUT = [
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0],
-  [0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0],
-  [0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,0],
-  [0,1,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0],
-  [0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0],
-  [0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0],
-  [0,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0],
-  [0,1,0,1,0,0,0,1,0,1,0,1,0,0,0,1,0,1,0,1,0],
-  [0,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0],
+  [0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0],
+  [0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0],
+  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
 const MAZE_START = { col: 1, row: 1 };
@@ -234,37 +234,37 @@ const img = { tiles: {}, obstacles: [], food: [] };
 const snd = {};
 
 let TS, COLS, ROWS;
-let mazeOX, mazeOY;      // top-left pixel of the maze grid (inside the fence)
-let worldG;              // pre-rendered background + paths + obstacles
-let fogG = [];           // pre-rendered fog blobs (4 rotations)
-let foodG = [];          // pre-rendered food sprites
-let sheetFrames;         // sheetFrames[rowIdx][colIdx] = {sx, sy, sw, sh} source rects
+let mazeOX, mazeOY; // top-left pixel of the maze grid (inside the fence)
+let worldG; // pre-rendered background + paths + obstacles
+let fogG = []; // pre-rendered fog blobs (4 rotations)
+let foodG = []; // pre-rendered food sprites
+let sheetFrames; // sheetFrames[rowIdx][colIdx] = {sx, sy, sw, sh} source rects
 
-let grid;                // grid[row][col] = { walk }
-let foods = [];          // { col, row, kind, eaten }
+let grid; // grid[row][col] = { walk }
+let foods = []; // { col, row, kind, eaten }
 
 let fogAlpha, fogTouch, fogSeen; // per-tile fog state
 
 let player;
-let state = "splash";    // splash | playing | win | lose
-let timeLeft;            // countdown (the only UI element)
-let timeSinceLastAte;    // the hidden variable — never displayed
-let clock;               // elapsed play time, drives fog aging
-let starveSeconds;       // eased copy of timeSinceLastAte: follows it while
-                         // climbing, drains over EFFECT_RECOVERY_SECONDS after
-                         // eating — the ambient effects read this
-let eatingFx;            // { food, elapsed } post-eat feedback window, else null
-let eatModal;            // { food, q, typed, elapsed } while the math modal is open
-let eatCount;            // eating events completed this run (drives question choice)
-let eatPromptAlpha;      // "Press E to eat" hint opacity 0..1 (fades with on/off food)
-let musicFilter;         // low-pass filter on the music for audio thinning
-let tickOsc, tickEnv;    // soft synth tick for wrong answers
-let fontDogica;          // the global game font
-let imgSplash;           // splash screen image
+let state = "splash"; // splash | playing | win | lose
+let timeLeft; // countdown (the only UI element)
+let timeSinceLastAte; // the hidden variable — never displayed
+let clock; // elapsed play time, drives fog aging
+let starveSeconds; // eased copy of timeSinceLastAte: follows it while
+// climbing, drains over EFFECT_RECOVERY_SECONDS after
+// eating — the ambient effects read this
+let eatingFx; // { food, elapsed } post-eat feedback window, else null
+let eatModal; // { food, q, typed, elapsed } while the math modal is open
+let eatCount; // eating events completed this run (drives question choice)
+let eatPromptAlpha; // "Press E to eat" hint opacity 0..1 (fades with on/off food)
+let musicFilter; // low-pass filter on the music for audio thinning
+let tickOsc, tickEnv; // soft synth tick for wrong answers
+let fontDogica; // the global game font
+let imgSplash; // splash screen image
 
-let timeStandingStill;   // seconds since the player last moved
-let stillLevel;          // displayed stillness-distortion level 0..1
-let endRevealT;          // seconds since win/lose — drives the end reveal
+let timeStandingStill; // seconds since the player last moved
+let stillLevel; // displayed stillness-distortion level 0..1
+let endRevealT; // seconds since win/lose — drives the end reveal
 
 // ============================================================
 // preload / setup / draw
@@ -277,7 +277,8 @@ function preload() {
   img.sheet = loadImage(CONFIG.ASSETS.characterSheet);
   img.fog = loadImage(CONFIG.ASSETS.fog);
   for (const p of CONFIG.ASSETS.food) img.food.push(loadImage(p));
-  for (const k in CONFIG.ASSETS.tiles) img.tiles[k] = loadImage(CONFIG.ASSETS.tiles[k]);
+  for (const k in CONFIG.ASSETS.tiles)
+    img.tiles[k] = loadImage(CONFIG.ASSETS.tiles[k]);
   for (const p of CONFIG.ASSETS.obstacles) img.obstacles.push(loadImage(p));
 
   soundFormats("mp3", "wav");
@@ -317,8 +318,12 @@ function setup() {
   foodG = img.food.map((f2) => {
     const g = createGraphics(TS, TS);
     const box = TS * CONFIG.FOOD_SCALE;
-    let w = box, h = box * (f2.height / f2.width);
-    if (h > box) { h = box; w = box * (f2.width / f2.height); }
+    let w = box,
+      h = box * (f2.height / f2.width);
+    if (h > box) {
+      h = box;
+      w = box * (f2.width / f2.height);
+    }
     g.image(f2, (TS - w) / 2, (TS - h) / 2, w, h);
     return g;
   });
@@ -343,7 +348,7 @@ function setup() {
 
 function draw() {
   const dt = min(deltaTime / 1000, 0.05);
-  
+
   if (state === "splash") {
     drawSplash();
     return;
@@ -383,7 +388,11 @@ function update(dt) {
   timeSinceLastAte += dt;
   if (eatingFx) {
     eatingFx.elapsed += dt;
-    if (eatingFx.elapsed >= max(CONFIG.FOOD_VANISH_SECONDS, CONFIG.EAT_GLOW_SECONDS)) eatingFx = null;
+    if (
+      eatingFx.elapsed >=
+      max(CONFIG.FOOD_VANISH_SECONDS, CONFIG.EAT_GLOW_SECONDS)
+    )
+      eatingFx = null;
   }
   if (eatModal) eatModal.elapsed += dt;
 
@@ -391,8 +400,12 @@ function update(dt) {
   // resets it, all effects drain back together over EFFECT_RECOVERY_SECONDS
   // instead of snapping.
   if (timeSinceLastAte >= starveSeconds) starveSeconds = timeSinceLastAte;
-  else starveSeconds = max(timeSinceLastAte,
-    starveSeconds - (CONFIG.EFFECTS_FULL_AT_SECONDS / CONFIG.EFFECT_RECOVERY_SECONDS) * dt);
+  else
+    starveSeconds = max(
+      timeSinceLastAte,
+      starveSeconds -
+        (CONFIG.EFFECTS_FULL_AT_SECONDS / CONFIG.EFFECT_RECOVERY_SECONDS) * dt,
+    );
   applyAudioThinning();
 
   // Stillness tracking for the sprite/shadow distortion. Climbs while the
@@ -402,9 +415,16 @@ function update(dt) {
   if (player.moving) timeStandingStill = 0;
   else timeStandingStill += dt;
   const stillTarget = constrain(
-    (timeStandingStill - CONFIG.STILLNESS_DISTORTION_ONSET_SECONDS) / 1.0, 0, 1);
+    (timeStandingStill - CONFIG.STILLNESS_DISTORTION_ONSET_SECONDS) / 1.0,
+    0,
+    1,
+  );
   if (stillTarget >= stillLevel) stillLevel = stillTarget;
-  else stillLevel = max(stillTarget, stillLevel - dt / CONFIG.DISTORTION_RESOLVE_SECONDS);
+  else
+    stillLevel = max(
+      stillTarget,
+      stillLevel - dt / CONFIG.DISTORTION_RESOLVE_SECONDS,
+    );
 
   if (!eatModal) handleMovement(dt);
   updatePlayerPixel();
@@ -420,7 +440,11 @@ function update(dt) {
 
 // The uneaten food the player is currently standing on, or null.
 function foodUnderPlayer() {
-  return foods.find((f) => !f.eaten && f.col === player.col && f.row === player.row) || null;
+  return (
+    foods.find(
+      (f) => !f.eaten && f.col === player.col && f.row === player.row,
+    ) || null
+  );
 }
 
 function handleMovement(dt) {
@@ -442,8 +466,11 @@ function handleMovement(dt) {
   if (player.moving) {
     // Severe starvation slows real movement — the one starvation effect
     // with mechanical bite. Recovers with everything else after eating.
-    const speedMul = lerp(1, CONFIG.MIN_SPEED_MULTIPLIER,
-      starveLevel(CONFIG.STARVATION_SPEED_ONSET_SECONDS));
+    const speedMul = lerp(
+      1,
+      CONFIG.MIN_SPEED_MULTIPLIER,
+      starveLevel(CONFIG.STARVATION_SPEED_ONSET_SECONDS),
+    );
     player.t += CONFIG.PLAYER_SPEED_TILES_PER_SEC * speedMul * dt;
     player.walkPhase += CONFIG.ANIM.framesPerSecond * dt;
     if (player.t >= 1) {
@@ -459,9 +486,24 @@ function handleMovement(dt) {
 function readHeldDirection() {
   const dirs = [
     { name: "up", dx: 0, dy: -1, held: keyIsDown(UP_ARROW) || keyIsDown(87) },
-    { name: "down", dx: 0, dy: 1, held: keyIsDown(DOWN_ARROW) || keyIsDown(83) },
-    { name: "left", dx: -1, dy: 0, held: keyIsDown(LEFT_ARROW) || keyIsDown(65) },
-    { name: "right", dx: 1, dy: 0, held: keyIsDown(RIGHT_ARROW) || keyIsDown(68) },
+    {
+      name: "down",
+      dx: 0,
+      dy: 1,
+      held: keyIsDown(DOWN_ARROW) || keyIsDown(83),
+    },
+    {
+      name: "left",
+      dx: -1,
+      dy: 0,
+      held: keyIsDown(LEFT_ARROW) || keyIsDown(65),
+    },
+    {
+      name: "right",
+      dx: 1,
+      dy: 0,
+      held: keyIsDown(RIGHT_ARROW) || keyIsDown(68),
+    },
   ];
   // Prefer continuing in the current facing so corridors feel smooth.
   dirs.sort((a, b) => (b.name === player.facing) - (a.name === player.facing));
@@ -472,7 +514,8 @@ function onArriveTile() {
   // Food is no longer consumed on contact — the player must press EAT_KEY
   // while standing on it (see openEatModal via keyPressed). Arriving on a
   // food tile only surfaces the "Press E to eat" hint.
-  if (player.col === MAZE_EXIT.col && player.row === MAZE_EXIT.row) endGame(true);
+  if (player.col === MAZE_EXIT.col && player.row === MAZE_EXIT.row)
+    endGame(true);
 }
 
 // Opens the math modal for the food under the player. Called only when the
@@ -489,8 +532,12 @@ function openEatModal(food) {
 }
 
 function updatePlayerPixel() {
-  const cx = player.moving ? lerp(player.from.col, player.to.col, player.t) : player.col;
-  const cy = player.moving ? lerp(player.from.row, player.to.row, player.t) : player.row;
+  const cx = player.moving
+    ? lerp(player.from.col, player.to.col, player.t)
+    : player.col;
+  const cy = player.moving
+    ? lerp(player.from.row, player.to.row, player.t)
+    : player.row;
   player.px = mazeOX + cx * TS + TS / 2;
   player.py = mazeOY + cy * TS + TS / 2;
 }
@@ -517,7 +564,10 @@ function revealAroundPlayer() {
 function updateFade(dt) {
   const past = timeSinceLastAte - CONFIG.FADE_ONSET_SECONDS;
   if (past <= 0) return;
-  const baseRate = min(CONFIG.FADE_MAX_RATE, CONFIG.FADE_RAMP_PER_SECOND * past);
+  const baseRate = min(
+    CONFIG.FADE_MAX_RATE,
+    CONFIG.FADE_RAMP_PER_SECOND * past,
+  );
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
       if (!fogSeen[row][col] || fogAlpha[row][col] >= 1) continue;
@@ -533,14 +583,20 @@ function updateFade(dt) {
 // reading the eased starveSeconds so eating recovers everything together.
 function starveLevel(onsetSeconds) {
   return constrain(
-    (starveSeconds - onsetSeconds) / (CONFIG.EFFECTS_FULL_AT_SECONDS - onsetSeconds), 0, 1);
+    (starveSeconds - onsetSeconds) /
+      (CONFIG.EFFECTS_FULL_AT_SECONDS - onsetSeconds),
+    0,
+    1,
+  );
 }
 
 // Music thins out as starvation climbs: quieter and low-pass muffled.
 function applyAudioThinning() {
   if (!snd.music.isLoaded() || !musicFilter) return;
   const lvl = starveLevel(CONFIG.AUDIO_THINNING_ONSET_SECONDS);
-  snd.music.setVolume(CONFIG.MUSIC_VOLUME * lerp(1, CONFIG.MIN_MUSIC_VOLUME, lvl));
+  snd.music.setVolume(
+    CONFIG.MUSIC_VOLUME * lerp(1, CONFIG.MIN_MUSIC_VOLUME, lvl),
+  );
   // Exponential sweep 16kHz (open) -> ~800Hz (distant and muffled).
   musicFilter.freq(16000 * pow(800 / 16000, lvl));
 }
@@ -575,7 +631,13 @@ function drawFoods() {
     const p = tilePx(eatingFx.food.col, eatingFx.food.row);
     const ctx = drawingContext;
     ctx.globalAlpha = 1 - k;
-    image(foodG[eatingFx.food.kind], p.x + (TS - size) / 2, p.y + (TS - size) / 2, size, size);
+    image(
+      foodG[eatingFx.food.kind],
+      p.x + (TS - size) / 2,
+      p.y + (TS - size) / 2,
+      size,
+      size,
+    );
     ctx.globalAlpha = 1;
   }
 }
@@ -588,7 +650,14 @@ function drawEatGlow() {
   const radius = (TS * lerp(0.5, CONFIG.EAT_GLOW_PEAK_SCALE, k)) / 2;
   const alpha = CONFIG.EAT_GLOW_ALPHA * (1 - k);
   const ctx = drawingContext;
-  const grad = ctx.createRadialGradient(player.px, player.py, 0, player.px, player.py, radius);
+  const grad = ctx.createRadialGradient(
+    player.px,
+    player.py,
+    0,
+    player.px,
+    player.py,
+    radius,
+  );
   grad.addColorStop(0, `rgba(255, 244, 195, ${alpha})`);
   grad.addColorStop(1, "rgba(255, 244, 195, 0)");
   ctx.fillStyle = grad;
@@ -602,10 +671,14 @@ function drawPlayer() {
   // has no eating row) with a small chewing bob. Otherwise idle keeps the
   // last facing and walking cycles frames on the facing's row.
   const eating = eatModal !== null;
-  const face = eating ? CONFIG.SHEET.facing.down : CONFIG.SHEET.facing[player.facing];
+  const face = eating
+    ? CONFIG.SHEET.facing.down
+    : CONFIG.SHEET.facing[player.facing];
   const walking = !eating && player.moving;
   const col = walking
-    ? CONFIG.ANIM.walkCycle[floor(player.walkPhase) % CONFIG.ANIM.walkCycle.length]
+    ? CONFIG.ANIM.walkCycle[
+        floor(player.walkPhase) % CONFIG.ANIM.walkCycle.length
+      ]
     : CONFIG.ANIM.idleFrame;
   const f = sheetFrames[face.row][col];
   const chewBob = eating ? 1.5 * sin(TWO_PI * 2 * eatModal.elapsed) : 0;
@@ -621,15 +694,21 @@ function drawPlayer() {
   const scaleY = sizeFluct * (1 + asym);
 
   const box = TS * CONFIG.PLAYER_SCALE;
-  let dw = box, dh = box * (f.sh / f.sw);
-  if (dh > box) { dh = box; dw = box * (f.sw / f.sh); }
+  let dw = box,
+    dh = box * (f.sh / f.sw);
+  if (dh > box) {
+    dh = box;
+    dw = box * (f.sw / f.sh);
+  }
 
   // Ground shadow first, so the sprite draws on top of it. Ambient size and
   // darkness follow the eased hunger level (small/light fed, large/dark
   // starved); stillness adds rippling, asymmetric pulsing on top.
   const ambient = starveLevel(CONFIG.FADE_ONSET_SECONDS);
-  const shadowW = TS * lerp(CONFIG.SHADOW_SIZE, CONFIG.SHADOW_MAX_SCALE, ambient)
-    * (1 + 0.1 * stillLevel * sin(TWO_PI * 0.25 * t + 0.6));
+  const shadowW =
+    TS *
+    lerp(CONFIG.SHADOW_SIZE, CONFIG.SHADOW_MAX_SCALE, ambient) *
+    (1 + 0.1 * stillLevel * sin(TWO_PI * 0.25 * t + 0.6));
   const shadowA = lerp(CONFIG.SHADOW_ALPHA, CONFIG.SHADOW_MAX_ALPHA, ambient);
   const squash = 0.38 * (1 + 0.1 * stillLevel * sin(TWO_PI * 0.18 * t + 2.1));
   const footY = player.py + (TS * CONFIG.PLAYER_SCALE) / 2 - 3;
@@ -650,8 +729,16 @@ function drawPlayer() {
   lobe(0, shadowW, shadowA);
   if (stillLevel > 0.01) {
     // faint side lobes gently ripple the shadow's edge while standing still
-    lobe(shadowW * 0.1 * sin(TWO_PI * 0.35 * t), shadowW * 0.55, shadowA * 0.2 * stillLevel);
-    lobe(-shadowW * 0.12 * sin(TWO_PI * 0.28 * t + 1.1), shadowW * 0.45, shadowA * 0.18 * stillLevel);
+    lobe(
+      shadowW * 0.1 * sin(TWO_PI * 0.35 * t),
+      shadowW * 0.55,
+      shadowA * 0.2 * stillLevel,
+    );
+    lobe(
+      -shadowW * 0.12 * sin(TWO_PI * 0.28 * t + 1.1),
+      shadowW * 0.45,
+      shadowA * 0.18 * stillLevel,
+    );
   }
   ctx.restore();
 
@@ -665,9 +752,17 @@ function drawPlayer() {
     const SLICES = 8;
     for (let i = 0; i < SLICES; i++) {
       const xo = warpAmp * sin(TWO_PI * 1.1 * t + i * 0.85);
-      image(img.sheet,
-        -dw / 2 + xo, -dh / 2 + (i * dh) / SLICES, dw, dh / SLICES + 0.6,
-        f.sx, f.sy + (i * f.sh) / SLICES, f.sw, f.sh / SLICES);
+      image(
+        img.sheet,
+        -dw / 2 + xo,
+        -dh / 2 + (i * dh) / SLICES,
+        dw,
+        dh / SLICES + 0.6,
+        f.sx,
+        f.sy + (i * f.sh) / SLICES,
+        f.sw,
+        f.sh / SLICES,
+      );
     }
   }
   pop();
@@ -762,11 +857,19 @@ function drawFog() {
 // Screen-edge vignette: the corners darken as starvation climbs, narrowing
 // the usable view. Fades back with everything else after eating.
 function drawVignette() {
-  const a = CONFIG.VIGNETTE_MAX_ALPHA * starveLevel(CONFIG.VIGNETTE_ONSET_SECONDS);
+  const a =
+    CONFIG.VIGNETTE_MAX_ALPHA * starveLevel(CONFIG.VIGNETTE_ONSET_SECONDS);
   if (a <= 0.005) return;
   const ctx = drawingContext;
   const r = Math.hypot(width, height) / 2;
-  const grad = ctx.createRadialGradient(width / 2, height / 2, r * 0.35, width / 2, height / 2, r);
+  const grad = ctx.createRadialGradient(
+    width / 2,
+    height / 2,
+    r * 0.35,
+    width / 2,
+    height / 2,
+    r,
+  );
   grad.addColorStop(0, "rgba(10, 6, 0, 0)");
   grad.addColorStop(0.6, `rgba(10, 6, 0, ${a * 0.55})`);
   grad.addColorStop(1, `rgba(10, 6, 0, ${a})`);
@@ -808,7 +911,7 @@ function drawSplash() {
   const imgAspect = imgSplash.width / imgSplash.height;
   const canvasAspect = width / height;
   let displayWidth, displayHeight;
-  
+
   if (imgAspect > canvasAspect) {
     // Image is wider; fit to height
     displayHeight = height;
@@ -818,7 +921,7 @@ function drawSplash() {
     displayWidth = width;
     displayHeight = width / imgAspect;
   }
-  
+
   const offsetX = (width - displayWidth) / 2;
   const offsetY = (height - displayHeight) / 2;
   image(imgSplash, offsetX, offsetY, displayWidth, displayHeight);
@@ -832,13 +935,21 @@ function drawOverlays() {
   // End-of-run reveal: hold on the true final state — trail fade, shadow,
   // number, everything exactly as it is — before any text appears.
   const a = constrain(
-    (endRevealT - CONFIG.END_REVEAL_HOLD_SECONDS) / CONFIG.END_REVEAL_FADE_SECONDS, 0, 1);
+    (endRevealT - CONFIG.END_REVEAL_HOLD_SECONDS) /
+      CONFIG.END_REVEAL_FADE_SECONDS,
+    0,
+    1,
+  );
   if (a <= 0) return;
   fill(0, 170 * a);
   rect(0, 0, width, height);
   fill(255, 255 * a);
   textSize(54);
-  text(state === "win" ? CONFIG.TEXT.win : CONFIG.TEXT.lose, width / 2, height / 2 - 20);
+  text(
+    state === "win" ? CONFIG.TEXT.win : CONFIG.TEXT.lose,
+    width / 2,
+    height / 2 - 20,
+  );
   fill(255, 130 * a);
   textSize(24);
   text(CONFIG.TEXT.restartKey, width / 2, height / 2 + 46);
@@ -857,7 +968,8 @@ function manageWalkSound() {
 function keyPressed() {
   if (state === "splash") {
     // Only SPACE dismisses the splash
-    if (keyCode === 32) { // SPACE
+    if (keyCode === 32) {
+      // SPACE
       userStartAudio();
       if (snd.music.isLoaded() && !snd.music.isPlaying()) snd.music.loop();
       state = "playing";
@@ -880,7 +992,10 @@ function keyPressed() {
       return false;
     }
     if (keyCode === ENTER || keyCode === RETURN) {
-      if (eatModal.typed.length > 0 && parseInt(eatModal.typed, 10) === eatModal.q.answer) {
+      if (
+        eatModal.typed.length > 0 &&
+        parseInt(eatModal.typed, 10) === eatModal.q.answer
+      ) {
         resolveEat();
       } else {
         eatModal.typed = "";
@@ -893,7 +1008,11 @@ function keyPressed() {
 
   // Press EAT_KEY while standing on food to open the modal. Does nothing if
   // not on food. Ignored mid-step so the tile under the player is settled.
-  if (state === "playing" && !eatModal && key.toUpperCase() === CONFIG.EAT_KEY) {
+  if (
+    state === "playing" &&
+    !eatModal &&
+    key.toUpperCase() === CONFIG.EAT_KEY
+  ) {
     if (!player.moving) {
       const food = foodUnderPlayer();
       if (food) openEatModal(food);
@@ -909,7 +1028,18 @@ function keyPressed() {
   }
 
   // Keep arrows/space from scrolling the page.
-  const gameKeys = [UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, 32, 65, 68, 82, 83, 87];
+  const gameKeys = [
+    UP_ARROW,
+    DOWN_ARROW,
+    LEFT_ARROW,
+    RIGHT_ARROW,
+    32,
+    65,
+    68,
+    82,
+    83,
+    87,
+  ];
   if (gameKeys.includes(keyCode)) return false;
 }
 
@@ -924,16 +1054,23 @@ function parseMaze() {
       grid[row].push({ walk: MAZE_LAYOUT[row][col] === 1 });
     }
   }
-  if (!isWalkable(MAZE_START.col, MAZE_START.row)) throw new Error("MAZE_START is not on a path cell");
-  if (!isWalkable(MAZE_EXIT.col, MAZE_EXIT.row)) throw new Error("MAZE_EXIT is not on a path cell");
+  if (!isWalkable(MAZE_START.col, MAZE_START.row))
+    throw new Error("MAZE_START is not on a path cell");
+  if (!isWalkable(MAZE_EXIT.col, MAZE_EXIT.row))
+    throw new Error("MAZE_EXIT is not on a path cell");
 
   foods = deadEndCells().map((f, i) => ({
-    col: f.col, row: f.row, kind: i % img.food.length, eaten: false,
+    col: f.col,
+    row: f.row,
+    kind: i % img.food.length,
+    eaten: false,
   }));
 }
 
 function isWalkable(col, row) {
-  return col >= 0 && row >= 0 && col < COLS && row < ROWS && grid[row][col].walk;
+  return (
+    col >= 0 && row >= 0 && col < COLS && row < ROWS && grid[row][col].walk
+  );
 }
 
 // Every dead-end path cell — walkable with exactly one walkable neighbour —
@@ -945,8 +1082,10 @@ function deadEndCells() {
     for (let col = 0; col < COLS; col++) {
       if (!isWalkable(col, row)) continue;
       const neighbours =
-        isWalkable(col, row - 1) + isWalkable(col + 1, row) +
-        isWalkable(col, row + 1) + isWalkable(col - 1, row);
+        isWalkable(col, row - 1) +
+        isWalkable(col + 1, row) +
+        isWalkable(col, row + 1) +
+        isWalkable(col - 1, row);
       if (neighbours > 1) continue;
       if (col === MAZE_START.col && row === MAZE_START.row) continue;
       if (col === MAZE_EXIT.col && row === MAZE_EXIT.row) continue;
@@ -989,10 +1128,10 @@ function tileSpriteFor(col, row) {
 
   const isStart = col === MAZE_START.col && row === MAZE_START.row;
   const isExit = col === MAZE_EXIT.col && row === MAZE_EXIT.row;
-  if (isStart) return { key: "begin", rot: openAngle - 180 };            // begin opens W
-  if (isExit) return { key: "end", rot: openAngle - 90 };                // end opens S
+  if (isStart) return { key: "begin", rot: openAngle - 180 }; // begin opens W
+  if (isExit) return { key: "end", rot: openAngle - 90 }; // end opens S
 
-  if (count <= 1) return { key: "begin", rot: openAngle - 180 };         // dead-end cap
+  if (count <= 1) return { key: "begin", rot: openAngle - 180 }; // dead-end cap
   if (count === 4) return { key: "cross", rot: 0 };
 
   if (count === 2) {
@@ -1002,14 +1141,14 @@ function tileSpriteFor(col, row) {
     if (n && e) return { key: "corner", rot: 0 };
     if (e && s) return { key: "corner", rot: 90 };
     if (s && w) return { key: "corner", rot: 180 };
-    return { key: "corner", rot: 270 };                                  // w && n
+    return { key: "corner", rot: 270 }; // w && n
   }
 
   // Three-way: tee opens W+E+S (missing N).
   if (!n) return { key: "tee", rot: 0 };
   if (!e) return { key: "tee", rot: 90 };
   if (!s) return { key: "tee", rot: 180 };
-  return { key: "tee", rot: 270 };                                       // !w
+  return { key: "tee", rot: 270 }; // !w
 }
 
 function drawTileInto(g, key, col, row, rotDeg) {
@@ -1069,7 +1208,8 @@ function resetGame() {
   timeStandingStill = 0;
   stillLevel = 0;
   endRevealT = 0;
-  if (snd.music && snd.music.isLoaded()) snd.music.setVolume(CONFIG.MUSIC_VOLUME);
+  if (snd.music && snd.music.isLoaded())
+    snd.music.setVolume(CONFIG.MUSIC_VOLUME);
   if (musicFilter) musicFilter.freq(16000);
 
   for (const f of foods) f.eaten = false;
