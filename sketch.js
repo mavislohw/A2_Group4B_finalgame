@@ -27,7 +27,7 @@ const CONFIG = {
   TIMER_START_SECONDS: 120,
 
   // Global font — applied to every piece of text the game renders.
-  FONT_PATH: "dogica/TTF/dogica.ttf",
+  FONT_PATH: "assets/fonts/dogica/TTF/dogica.ttf",
 
   // Splash screen on initial load.
   SPLASH_IMAGE_PATH: "assets/images/Splash.png",
