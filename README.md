@@ -23,7 +23,7 @@ The core lesson is players who eat consistently are the ones who finish. While n
 
 **Integration of the condition**
 We represented body dysmorphia by distorting the sprite when the player is not on the move, modelling how people experiencing anorexia specifically struggle with obsessing over their body image which is why  many experiencing that will turn to exercising and other restrictions/ activities to remedy that [1].
-We represented how meals are no longer neutral as eating costs time and mental effort and we represented that through a math puzzle that costs the player time so skipping feels efficient in the moment, yet restriction silently erases the trail behind you.
+We represented how meals are no longer neutral as eating costs time and mental effort and we represented that through a math puzzle that costs the player time so skipping feels efficient in the moment, yet restriction silently erases the trail behind you [1].
 The fog represents the brain fog and fatigue of having anorexia [1].
 
 
