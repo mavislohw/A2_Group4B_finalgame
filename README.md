@@ -17,8 +17,10 @@ The first level of The Path Behind is a top-down maze game played against a two-
 
 **Affordances**
 The game leans on affordances so the player learns by looking rather than by being told. The impassable walls of corn and leafy objects read as boundaries with no collision tutorial needed. The lit trail behind the player affords a felt sense of "I've been here," turning walked corridors into readable memory; when it fades back to darkness it affords the opposite  "this is unknown again", prompting hesitation exactly where the player used to feel sure. Food's distinct sprite affords "this is interactable," and the "Press E to eat" prompt, appearing only when standing on it, marks eating as a deliberate, optional act. Most deliberately, the game inverts the usual affordance of stillness: where most games make standing still feel safe, ours makes rest visibly uncomfortable through the warping sprite, teaching through discomfort that stopping is where something is wrong.
+
 **GameFlow** 
 The core lesson is players who eat consistently are the ones who finish. While never stated; it emerges through the player's own trial and error. Feedback is immediate: the timer counts in real time, the trail lights as you walk and fades when you restrict, and the sprite distorts the moment you stop. Instant restart lowers the cost of failure and rewards experimentation, while a minimal interface keeps concentration on moment-to-moment decisions.
+
 **Integration of the condition**
 We represented body dysmorphia by distorting the sprite when the player is not on the move, modelling how people experiencing anorexia specifically struggle with obsessing over their body image which is why  many experiencing that will turn to exercising and other restrictions/ activities to remedy that [1].
 We represented how meals are no longer neutral as eating costs time and mental effort and we represented that through a math puzzle that costs the player time so skipping feels efficient in the moment, yet restriction silently erases the trail behind you.
