@@ -58,8 +58,8 @@ to eat; the timer keeps running while you solve the mental-math question.
 
 
 **Post-Showcase — planned improvements if iteration continued:**
-Potentially zooming in more on the character sprite to immerse the player more into the experience and to enhance the visual detail of the body pixelation/dysmorphia.
-Possibly changing the action that is required to “eat” the food the action of eating as the mental math problems come off as a bit too educational for some players.
+1. Potentially zooming in more on the character sprite to immerse the player more into the experience and to enhance the visual detail of the body pixelation/dysmorphia.
+2. Possibly changing the action that is required to “eat” the food the action of eating as the mental math problems come off as a bit too educational for some players.
 
 
 
@@ -117,8 +117,7 @@ from https://freesound.org/people/InspectorJ/sounds/412068/
 [7] tuudurt. [n.d.]. Level Win. Freesound. Retrieved July 5, 2026 from
 https://freesound.org/people/tuudurt/sounds/258142/
 
-[8] balancedwithhannah. 2025. Overcoming The Lies | Battling an Eating Disorder
-+ Exercise Addiction | My Testimony. (September 25, 2025). Retrieved July 8,
+[8] balancedwithhannah. 2025. Overcoming The Lies | Battling an Eating Disorder + Exercise Addiction | My Testimony. (September 25, 2025). Retrieved July 8,
 2026 from https://youtu.be/t5KVWGX62P8
 
 [9] Julianna Zalescik. 2020. My Eating Disorder Story. (April 2020). Retrieved
